@@ -1,0 +1,11 @@
+name: text
+description: General text prompt for answering questions based on retrieved context.
+template: |
+  Answer the question based on the context below. Be concise and accurate.
+
+  Context:
+  {context}
+
+  Question: {query}
+
+  Answer: 

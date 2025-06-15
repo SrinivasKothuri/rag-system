@@ -1,0 +1,11 @@
+name: json
+description: Prompt for answering questions with a JSON response based on retrieved context.
+template: |
+  Answer the question below using the context. Respond ONLY with a valid JSON object.
+
+  Context:
+  {context}
+
+  Question: {query}
+
+  JSON Answer: 

@@ -1,0 +1,11 @@
+name: code
+description: Prompt for answering questions with code or code explanations based on retrieved context.
+template: |
+  Use the context below to answer the question. If code is required, provide only the code block and a brief explanation.
+
+  Context:
+  {context}
+
+  Question: {query}
+
+  Code Answer: 
