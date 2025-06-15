@@ -13,14 +13,14 @@ setup(
     ],
     python_requires=">=3.8",
     author="Your Name",
-    author_email="your.email@example.com",
+    author_email="lssrinivas.kothuri@gmail.com",
     description="A simple but powerful RAG system",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/rag-system",
+    url="https://github.com/SrinivasKothuri/rag-system",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-) 
+)
