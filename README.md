@@ -4,7 +4,7 @@ A simple but powerful Retrieval-Augmented Generation (RAG) system that combines 
 
 ## Components
 
-### Retriever
+### The Retriever
 The retriever component is responsible for:
 - Loading and processing documents
 - Creating embeddings for documents and queries
