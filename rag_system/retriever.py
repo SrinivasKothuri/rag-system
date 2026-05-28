@@ -41,23 +41,41 @@ class Retriever:
 
     def load_documents(self, data_dir: str):
         """Load and process documents from the specified directory."""
+        docs_to_add: List[Dict[str, Any]] = []
         for filename in os.listdir(data_dir):
             if filename.endswith('.txt'):
                 with open(os.path.join(data_dir, filename), 'r', encoding="utf-8") as f:
                     content = f.read()
-                    embedding = self.model.generate_embedding(content)
-                    self.documents.append({
+                    docs_to_add.append({
                         'content': content,
                         'metadata': {'source': filename}
                     })
-                    # Create a contiguous array with the correct shape and type
-                    embedding_array = np.array(embedding, dtype=np.float32)
-                    if embedding_array.ndim == 1:
-                        embedding_array = embedding_array.reshape(1, -1)
-                    
-                    # Initialize index if needed and validate dimension
-                    self._initialize_index(embedding_array.shape[1])
-                    self.index.add(embedding_array)
+
+        self.add_documents(docs_to_add)
+
+    def add_documents(self, docs: List[Dict[str, Any]]):
+        """Add pre-built documents to the index.
+
+        Each document must be of the form:
+        {"content": "...", "metadata": {...}}
+        """
+        for doc in docs:
+            content = doc.get("content", "").strip()
+            if not content:
+                continue
+
+            embedding = self.model.generate_embedding(content)
+            self.documents.append(doc)
+
+            embedding_array = np.array(embedding, dtype=np.float32)
+            if embedding_array.ndim == 1:
+                embedding_array = embedding_array.reshape(1, -1)
+
+            self._initialize_index(embedding_array.shape[1])
+            self.index.add(embedding_array)
+
+        if self.index is None:
+            return
 
         # Save the updated index and documents
         faiss.write_index(self.index, self.config["index_path"])
@@ -65,8 +83,12 @@ class Retriever:
     
     def search(self, query: str, top_k: int = None) -> List[Dict[str, Any]]:
         """Search for the most relevant documents."""
+        if self.index is None or not self.documents:
+            return []
+
         if top_k is None:
             top_k = self.config["top_k"]
+        top_k = min(top_k, len(self.documents))
             
         query_embedding = self.model.generate_embedding(query)
         distances, indices = self.index.search(
