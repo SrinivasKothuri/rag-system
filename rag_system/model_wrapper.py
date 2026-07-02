@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Final
 import requests
 from openai import OpenAI
+
+
+OLLAMA_API_URL: Final[str] = "http://localhost:11434/api"
 
 class ModelWrapper(ABC):
     """Abstract base class for model wrappers."""
@@ -22,7 +25,7 @@ class OllamaWrapper(ModelWrapper):
     def __init__(self, embedding_model: str, generation_model: str):
         self.embedding_model = embedding_model
         self.generation_model = generation_model
-        self.base_url = "http://localhost:11434/api"
+        self.base_url = OLLAMA_API_URL
     
     def generate_embedding(self, text: str) -> List[float]:
         """Generate embedding using Ollama's embedding model."""
